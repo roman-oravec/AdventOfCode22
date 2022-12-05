@@ -22,14 +22,16 @@ for row in range(len(crates) - 1, -1, -1):
         col_n += 1
         pos += 4
         continue
-# 1
+# 2 (#1 commit before)
 moves = [[int(x) for x in y.split() if x.isdigit()] for y in moves]
 for m in moves:
     src = cols['col_%s' % m[1]]
     dst = cols['col_%s' % m[2]]
-    for i in range(m[0]):
-        crate = src.pop()
-        dst.append(crate)
+    load = src[-m[0]:]
+    # print(m)
+    #print("LOAD", load)
+    dst += load
+    cols['col_%s' % m[1]] = cols['col_%s' % m[1]][:-m[0]]
 
 for i in n:
     print(cols['col_%s' % i][-1], end='')
