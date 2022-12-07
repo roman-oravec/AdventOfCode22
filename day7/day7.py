@@ -12,12 +12,29 @@ class Dir:
     def add_file(self, f):
         self.files.append(f.split())
 
+    def get_size(self):
+        return sum([int(x[0]) for x in self.files])
 
-def my_ls(lines):
-    pass
+
+def prt_dir(d):
+    if d.children == []:
+        return
+    print('DIR:', d.name, ':\n', end='\t')
+    for c in d.children:
+        print(c.name, end=', ')
+    print()
+    for c in d.children:
+        prt_dir(c)
 
 
-with open('day7/input2.txt', 'r') as f:
+def total_size(d):
+    subs = 0
+    for s in d.children:
+        subs += total_size(s)
+    return subs + d.get_size()
+
+
+with open('day7/input.txt', 'r') as f:
     data = f.read().splitlines()
 
 root = Dir('/', None)
@@ -51,5 +68,5 @@ while i < len(data):
             cwd = next
         i += 1
 
-for c in root.children:
-    print(c.name)
+# prt_dir(root)
+print(total_size(root))
