@@ -44,6 +44,19 @@ def partOne(dirs):
     return res
 
 
+def partTwo(dirs, root):
+    res = total_size(root)
+    full = 70000000
+    free = full - res
+    needed = 30000000
+    for d in dirs:
+        ts = total_size(d)
+        # print(ts)
+        if (free + ts) > needed and ts < res:
+            res = ts
+    return res
+
+
 with open('day7/input.txt', 'r') as f:
     data = f.read().splitlines()
 
@@ -83,4 +96,5 @@ while i < len(data):
 
 # prt_dir(root)
 # print(total_size(root))
-print(partOne(dirs))
+print("Part 1:", partOne(dirs))
+print("Part 2:", partTwo(dirs, root))
