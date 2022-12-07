@@ -34,12 +34,24 @@ def total_size(d):
     return subs + d.get_size()
 
 
+def partOne(dirs):
+    res = 0
+    for d in dirs:
+        ts = total_size(d)
+        #print(d.name, ts)
+        if ts <= 100000:
+            res += ts
+    return res
+
+
 with open('day7/input.txt', 'r') as f:
     data = f.read().splitlines()
 
 root = Dir('/', None)
 cwd = root
 
+dirs = set()
+dirs.add(root)
 i = 1
 while i < len(data):
     line = data[i]
@@ -66,7 +78,9 @@ while i < len(data):
         else:
             next = [x for x in cwd.children if x.name == d][0]
             cwd = next
+        dirs.add(cwd)
         i += 1
 
 # prt_dir(root)
-print(total_size(root))
+# print(total_size(root))
+print(partOne(dirs))
