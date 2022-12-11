@@ -10,6 +10,7 @@ class Monke():
   def inspect(self, old):
     print(f"Monkey inspects item with level {old}")
     print(f"Multiplied to {eval(self.op)}")
+    self.inspect_count += 1
     return eval(self.op)
 
   def do_test(self, x):
@@ -63,7 +64,7 @@ def round(monkes):
 
 
 
-with open('day11/input2.txt', 'r') as f:
+with open('day11/input.txt', 'r') as f:
   data = f.read().split('\n\n')
 
 monkes = load_monkes(data)
@@ -71,8 +72,13 @@ n = 20
 for i in range(n):
   round(monkes)
 
+counts = []
 for m in monkes:
-  print(m.id, ': ', m.items)
+  counts.append(m.inspect_count)
+  print(m.id, ': ', m.inspect_count)
+
+counts.sort()
+print(counts[-1] * counts[-2])
 
 
 
