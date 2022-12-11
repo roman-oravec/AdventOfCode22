@@ -8,34 +8,35 @@ class Monke():
     self.inspect_count = 0
 
   def inspect(self, old):
-    print(f"Monkey inspects item with level {old}")
-    print(f"Multiplied to {eval(self.op)}")
+    res = eval(self.op) % BASE
+    log(f"Monkey inspects item with level {old}")
+    log(f"Multiplied to {res}")
     self.inspect_count += 1
-    return eval(self.op)
+    return res
 
   def do_test(self, x):
     return x % self.test == 0
 
   def monke_throw(self, i):
     if self.do_test(i):
-      print(f"{i} is divisible by {self.test}")
-      print(f"Throwing item with worry level {i} to monkey {self.throw_to[0]}")
+      log(f"{i} is divisible by {self.test}")
+      log(f"Throwing item with worry level {i} to monkey {self.throw_to[0]}")
       return i, self.throw_to[0]
     else:
-      print(f"{i} is NOT divisible by {self.test}")
-      print(f"Throwing item with worry level {i} to monkey {self.throw_to[1]}")
+      log(f"{i} is NOT divisible by {self.test}")
+      log(f"Throwing item with worry level {i} to monkey {self.throw_to[1]}")
       return i, self.throw_to[1]
 
   def turn(self):
     throws = []
     for i in self.items:
-      print(i)
+      log(i)
       i = self.inspect(i)
-      i = i // 3
-      print(f"Monke is bored, current level is {i}")
+      #i = i // 3
+      log(f"Monke is bored, current level is {i}")
       what, who = self.monke_throw(i)
       throws.append((what,who))
-      print(f"Monkey items: {self.items}, throws: {throws}")
+      log(f"Monkey items: {self.items}, throws: {throws}")
     return throws
 
 
@@ -55,20 +56,30 @@ def load_monkes(data):
 
 def round(monkes):
   for m in monkes:
-    print(f"Monkey {m.id}")
+    log(f"Monkey {m.id}")
     throws = m.turn()
     for t in throws:
       monkes[t[1]].items.append(t[0])
     m.items = []
-    print()
+    log()
+
+def log(s=''):
+  if DEBUG:
+    print(s)
 
 
 
 with open('day11/input.txt', 'r') as f:
   data = f.read().split('\n\n')
 
+DEBUG = False
+
 monkes = load_monkes(data)
-n = 20
+n = 10000
+BASE = 1
+for m in monkes:
+  BASE *= m.test
+
 for i in range(n):
   round(monkes)
 
@@ -76,7 +87,6 @@ counts = []
 for m in monkes:
   counts.append(m.inspect_count)
   print(m.id, ': ', m.inspect_count)
-
 counts.sort()
 print(counts[-1] * counts[-2])
 
